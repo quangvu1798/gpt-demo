@@ -13,7 +13,7 @@ def main():
     prompt = construct_prompt(question)[0]
     if st.button('Lấy câu trả lời'):
         with st.spinner('Đang sinh câu trả lời...'):
-            openai.api_key = "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"
+            openai.api_key = "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"
             response = ''
             for resp in openai.Completion.create(prompt = prompt, **COMPLETIONS_API_PARAMS):
                 response += resp.choices[0].text
