@@ -14,7 +14,7 @@ def count_tokens(text: str) -> int:
 df = pd.read_csv('data.csv', sep = '$', names = ['title', 'heading', 'content'])
 df['tokens'] = [count_tokens(c) for c in df['content'].values]
 
-openai.api_key = os.environ.get('OPENAI_KEY', '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')
+openai.api_key = os.environ.get('OPENAI_KEY', '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')
 COMPLETIONS_MODEL = 'text-davinci-003'
 EMBEDDING_MODEL = 'text-embedding-ada-002'
 
