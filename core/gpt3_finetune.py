@@ -21,7 +21,7 @@ def main():
     if st.button('Lấy câu trả lời'):
         with st.spinner('Đang sinh câu trả lời...'):
             response = ''
-            openai.api_key = "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"
+            openai.api_key = "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"
             for resp in openai.Completion.create(prompt = prompt, **finetune_model):
                 response += resp.choices[0].text
                 response = response.replace(r'\n', '\n\n')
