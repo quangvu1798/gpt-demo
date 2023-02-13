@@ -14,17 +14,16 @@ def count_tokens(text: str) -> int:
 df = pd.read_csv('data.csv', sep = '$', names = ['title', 'heading', 'content'])
 df['tokens'] = [count_tokens(c) for c in df['content'].values]
 
-openai.api_key = os.environ.get('OPENAI_KEY', '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')
 COMPLETIONS_MODEL = 'text-davinci-003'
 EMBEDDING_MODEL = 'text-embedding-ada-002'
 
-MAX_SECTION_LEN = 2048
+MAX_SECTION_LEN = 3048
 SEPARATOR = '\n"""\n'
 separator_len = count_tokens(SEPARATOR)
 
 COMPLETIONS_API_PARAMS = {
     'temperature': 0.0,
-    'max_tokens': 2000,
+    'max_tokens': 1000,
     'model': COMPLETIONS_MODEL,
     'stream': True
 }
@@ -53,7 +52,6 @@ def order_document_sections_by_query_similarity(query: str, document_embeddings:
 
 def construct_prompt(question: str, context_embeddings: dict = document_embeddings, df: pd.DataFrame = df, max_context = 1) -> str:
     most_relevant_document_sections = order_document_sections_by_query_similarity(question, context_embeddings)
-    
     chosen_sections = []
     chosen_sections_len = 0
     chosen_sections_indexes = []
@@ -66,11 +64,12 @@ def construct_prompt(question: str, context_embeddings: dict = document_embeddin
         chosen_sections_len += document_section.tokens.values[0] + separator_len
         if chosen_sections_len > MAX_SECTION_LEN or len(chosen_sections) >= 1:
             break
-            
+        
+        print('here', document_section.content.values[0])
         chosen_sections.append(SEPARATOR + document_section.content.values[0] + SEPARATOR)
         chosen_sections_indexes.append(str(section_index))
     
-    header = '''Trả lời trung thực dựa vào ngữ cảnh đã cung cấp (bắt buộc phải trả lời những link trong ngoặc vuông []), và nếu câu trả lời không có trong văn bản dưới đây, Hãy trả lời theo tri thức của bạn\n\nContext:\n'''
+    header = '''Trả lời trung thực dựa vào ngữ cảnh đã cung cấp (bắt buộc phải trả lời những link trong ngoặc vuông []), và nếu câu trả lời không có trong văn bản dưới đây, Hãy trả lời theo tri thức của bạn\n\nNgữ cảnh:\n'''
     
     return (header + ''.join(chosen_sections) + '\n Câu hỏi: ' + question + '\n Trả lời:', chosen_sections_indexes, chosen_sections)
 
