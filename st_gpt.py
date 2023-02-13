@@ -1,12 +1,11 @@
 import streamlit as st
 
-from core import intro, finetune, qa, gpt3_finetune
+from core import intro, finetune, qa
 
 def init():
     st.session_state.pages = {
         '🕴️ Introduce': intro.main,
-        # '🔥 Fine-tuned model': finetune.main,
-        '🌟 Fine-tuned GPT-3 with meInvoice Data': gpt3_finetune.main,
+        '🔥 Fine-tuned model': finetune.main,
         '✨ Question-Answering with Embedding': qa.main
     }
 
@@ -39,8 +38,7 @@ def main():
         st.image('https://media.giphy.com/media/udbIBMfgpypAqeQDHs/giphy.gif')
         page = st.selectbox('Chọn mục thử nghiệm',
                             ('🕴️ Introduce',
-                            #  '🔥 Fine-tuned model',
-                             '🌟 Fine-tuned GPT-3 with meInvoice Data',
+                             '🔥 Fine-tuned model',
                             '✨ Question-Answering with Embedding'),
                             key = 'choose_page')
     load_page(page) 
